@@ -248,6 +248,22 @@ Nyumbalink/
 
 ---
 
+## Premium Version
+
+A higher version of Nyumbalink is available with additional features:
+
+- **M-Pesa Integration** — Automated payment processing via Safaricom Daraja API
+- **SMS Reminders** — Automatic rent due reminders and payment confirmations via SMS
+- **Automated Receipts** — Instant M-Pesa confirmation receipts sent to tenants
+- **Payment Reconciliation** — Real-time matching of M-Pesa transactions to tenant accounts
+
+For access to the premium version, contact:
+
+- **Email:** alexmiano101@gmail.com
+- **GitHub:** [@mianohh](https://github.com/mianohh)
+
+---
+
 ## Contributing
 
 1. Fork the repository
