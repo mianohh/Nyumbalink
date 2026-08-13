@@ -1,0 +1,14 @@
+{
+    "name": "nyumbalink/real-estate-management",
+    "description": "Nyumbalink Rental Management System - Property Management MVP",
+    "type": "project",
+    "require": {
+        "php": ">=8.0",
+        "tecnickcom/tcpdf": "^6.6",
+        "phpoffice/phpspreadsheet": "^1.29"
+    },
+    "autoload": {},
+    "config": {
+        "optimize-autoloader": true
+    }
+}

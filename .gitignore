@@ -1,0 +1,120 @@
+# Dependencies
+/vendor
+/node_modules
+/.grunt
+/.sass-cache
+/.vscode
+/.idea
+
+# Environment files
+.env
+.env.production
+.env.staging
+.env.example
+.env.local
+*.env.*
+production.env
+
+# Log files
+*.log
+logs/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Directory for uploaded files
+uploads/
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# nyc test coverage
+.nyc_output
+
+# Grunt intermediate storage
+.grunt
+
+# Bower dependency directory (https://bower.io/)
+bower_components
+
+# Build output
+reports/
+
+# Temporal files
+*.tmp
+*.temp
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Database
+*.sqlite
+*.db
+
+# Temporary backups
+*_backup*
+*_bak*
+
+# OS generated files
+.DS_Store
+.Ds_Store
+desktop.ini
+Thumbs.db
+
+# Other
+*.orig
+*.rej
+
+# Test generated files
+doctests
+
+# Temporary logs
+tmp/
+
+# PHP version check
+# @see http://php.net/manual/en/function.phpversion.php
+*.diff
+*.patch
+*.phpt
+
+# Generated documentation
+doc/
+avg_doc_html
+html/doc
+
+# OS service files
+system/
+
+# Kaptcha output
+captcha/
+
+# Data files with credentials
+credentials*
+*_key
+*_secret
+
+# Folder config local files
+*.suo
+*.sln
+*.userprefs
+
+# VSCode
+.vscode/*.json
+*.code-workspace
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# LibreOffice lock files
+~lock.*
+
+# Saved web pages
+For Sale_*
