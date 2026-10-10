@@ -1,279 +1,174 @@
 # Nyumbalink
 
-**Rental Management System**
+Nyumbalink is a rental property management system for the Kenyan market (KES). It helps property managers track **houses**, **tenants**, **rental agreements**, and **payments**, and generate branded **PDF receipts**.
 
-[![PHP](https://img.shields.io/badge/PHP-8.0+-777BB4?style=flat&logo=php&logoColor=white)](https://php.net)
-[![MariaDB](https://img.shields.io/badge/MariaDB-10.5+-003545?style=flat&logo=mariadb&logoColor=white)](https://mariadb.org)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+Built with **Laravel 13**, **Livewire 4**, **Tailwind CSS 4**, and **Flux UI**, backed by MySQL/MariaDB.
 
-A modern web application for managing rental properties, tenants, payments, and generating professional reports. Built with PHP and MySQL, designed for property managers in Kenya.
+> This is a full rewrite of the original plain-PHP application. The legacy codebase is preserved on the [`main`](../../tree/main) branch.
 
 ---
 
 ## Features
 
-- **Dashboard** — Real-time statistics with interactive charts
-- **House Management** — Add, edit, view, and delete rental properties with image support
-- **Tenant Management** — Register tenants, manage rental agreements, and track assignments
-- **Payment Recording** — Record payments with automatic receipt generation
-- **PDF Receipts** — Professional branded PDF receipts via TCPDF
-- **Reports** — Payment, tenant, and occupancy reports with PDF/Excel export
-- **Role-Based Access** — Admin and staff roles with granular permissions
-- **Security** — CSRF protection, rate limiting, prepared statements, security headers
+- **Dashboard** — tenant/house counts, monthly & total revenue, revenue and house-status charts, recent payments, quick actions.
+- **Houses** — CRUD, photo upload, search/filter/pagination, tenant assign & unassign (occupancy tracked automatically).
+- **Tenants** — CRUD, optional house assignment on creation, detail view with payment history, agreements and a live monthly balance.
+- **Rental agreements** — per-tenant agreements with auto-computed end dates; create and terminate from the tenant page.
+- **Payments** — record payments (with a live balance preview), list with date-range/search filters, detail view, unique receipt numbers (`RCP-YYYYmmdd-XXX`).
+- **PDF receipts** — branded TCPDF receipt with inline view and download.
+- **Staff management** (admin-only) — administrators can add and remove staff accounts.
+- **Auth** — session login with rate limiting, optional 2FA and passkeys, password reset. Public registration is disabled; staff accounts are created by admins.
+
+### Security / behaviour improvements over the legacy app
+
+- Role-based authorization: **deletes are admin-only** (enforced by policies).
+- Login rate limiting (5/min) is actually wired up.
+- Destructive actions use `DELETE`/POST — never GET.
+- House occupancy is managed in one place (`HouseOccupancyService`) instead of being toggled in six different pages.
+- HTML is escaped by Blade at render time (the legacy app stored escaped entities in the database).
 
 ---
 
-## Tech Stack
+## Requirements
 
-| Layer | Technology |
-|-------|------------|
-| Backend | PHP 8.0+ |
-| Database | MariaDB / MySQL 5.7+ |
-| Frontend | HTML5, CSS3, JavaScript |
-| PDF Generation | TCPDF |
-| Excel Export | PhpSpreadsheet |
-| Charts | Chart.js |
-| Icons | Bootstrap Icons |
+- PHP **8.3+** (8.4 recommended) with `mbstring`, `pdo_mysql`, `xml`, `curl`, `zip`, `gd`, `intl`, `bcmath`, `sqlite3` (for tests)
+- Composer 2
+- Node.js 20+ and npm
+- MySQL 8 / MariaDB 10.4+
 
 ---
 
-## Architecture
+## Local installation
 
-```mermaid
-graph LR
-    Client[Browser] -->|HTTP/HTTPS| Server[PHP 8.0+]
-    Server -->|PDO| DB[(MariaDB)]
-    Server -->|TCPDF| PDF[PDF Receipts]
-    Server -->|PhpSpreadsheet| Excel[Excel Reports]
+```bash
+git clone https://github.com/mianohh/Nyumbalink.git
+cd Nyumbalink
+git checkout laravel
 
-    subgraph Frontend
-        CSS[CSS3]
-        JS[JavaScript]
-        Charts[Chart.js]
-    end
+cp .env.example .env
+composer install
+php artisan key:generate
 
-    Client --> Frontend
+# Create a database, then point .env at it (DB_DATABASE / DB_USERNAME / DB_PASSWORD)
+php artisan migrate --seed
+
+npm install
+npm run build
+
+php artisan serve
+```
+
+The seeder creates the first administrator from the `ADMIN_*` variables in `.env`:
+
+| Field | Default |
+|---|---|
+| Email | `admin@nyumbalink.test` |
+| Password | `password` |
+
+**Change these before deploying anywhere real.**
+
+Optional demo data:
+
+```bash
+php artisan db:seed --class=DemoSeeder
+```
+
+Serve uploaded house photos in development:
+
+```bash
+php artisan storage:link
 ```
 
 ---
 
-## Database Schema
+## Testing & code style
 
-```mermaid
-erDiagram
-    users {
-        bigint id PK
-        varchar name
-        varchar email UK
-        enum role
-        varchar password
-        timestamp created_at
-    }
-
-    houses {
-        int house_id PK
-        varchar house_number UK
-        varchar location
-        decimal rent_amount
-        enum status
-        text description
-        varchar image
-    }
-
-    tenants {
-        int tenant_id PK
-        varchar name
-        varchar contact
-        varchar id_number UK
-        int house_id FK
-    }
-
-    payments {
-        int payment_id PK
-        int tenant_id FK
-        decimal amount_paid
-        date payment_date
-        varchar receipt_number UK
-        text notes
-    }
-
-    rental_agreements {
-        int agreement_id PK
-        int tenant_id FK
-        int house_id FK
-        date start_date
-        date end_date
-        int duration_months
-        decimal monthly_rent
-        enum status
-    }
-
-    db_settings {
-        int id PK
-        varchar setting_key UK
-        text setting_value
-    }
-
-    users ||--o{ tenants : "manages"
-    houses ||--o{ tenants : "houses"
-    tenants ||--o{ payments : "makes"
-    tenants ||--o{ rental_agreements : " signs"
-    houses ||--o{ rental_agreements : "included in"
+```bash
+php artisan test        # Pest feature suite (uses in-memory SQLite)
+composer run lint       # Laravel Pint (auto-fix)
+composer run lint:check # Pint, check only
 ```
 
 ---
 
-## Project Structure
+## Project structure
 
 ```
-Nyumbalink/
-├── assets/              # CSS, JS, images
-│   ├── css/style.css
-│   ├── js/app.js
-│   └── images/
-├── config/              # Application configuration
-│   ├── app.php
-│   └── database.php
-├── includes/            # Core functions and services
-│   ├── core.php
-│   ├── functions.php
-│   ├── header.php
-│   ├── footer.php
-│   └── services/
-├── modules/             # Feature modules
-│   ├── auth/            # Login, logout, registration
-│   ├── dashboard/       # Main dashboard
-│   ├── houses/          # Property management
-│   ├── tenants/         # Tenant management
-│   ├── payments/        # Payment recording & receipts
-│   └── reports/         # Report generation
-├── vendor/              # Composer dependencies
-├── .env                 # Environment configuration
-├── .htaccess            # URL rewriting & security
-├── composer.json
-├── index.php            # Entry point
-└── README.md
+app/
+├── Enums/            # HouseStatus, AgreementStatus, UserRole
+├── Http/
+│   ├── Controllers/  # PaymentReceiptController (PDF)
+│   └── Middleware/   # EnsureUserIsAdmin
+├── Livewire/         # Full-page components (Dashboard, Houses/, Tenants/, Payments/, Staff/)
+├── Models/           # House, Tenant, Payment, RentalAgreement, User
+├── Policies/         # Role-aware authorization
+├── Services/         # HouseOccupancyService, ReceiptPdfService
+└── Support/          # format_currency / format_date helpers
+database/
+├── migrations/       # houses, tenants, payments, rental_agreements, users.role
+├── factories/
+└── seeders/          # DatabaseSeeder (admin), DemoSeeder (sample data)
+resources/views/
+├── layouts/          # Sidebar + auth layouts (Flux)
+└── livewire/         # Component views per module
+routes/web.php        # All application routes
 ```
 
----
+### Legacy → Laravel route mapping
 
-## Getting Started
-
-### Prerequisites
-
-- PHP 8.0 or higher
-- MariaDB 10.5+ or MySQL 5.7+
-- Composer
-
-### Installation
-
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/mianohh/Nyumbalink.git
-   cd Nyumbalink
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   composer install
-   ```
-
-3. **Configure environment**
-
-   ```bash
-   cp .env.example .env
-   ```
-
-   Edit `.env` with your database credentials:
-
-   ```
-   DB_HOST=localhost
-   DB_NAME=nyumbalink
-   DB_USER=root
-   DB_PASS=your_password
-   ```
-
-4. **Create the database**
-
-   ```bash
-   mysql -u root -p -e "CREATE DATABASE nyumbalink CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-   ```
-
-5. **Run the installer**
-
-   Navigate to `http://localhost/Nyumbalink/install.php` in your browser, or run the SQL schema manually.
-
-6. **Delete install.php** (security)
-
-   ```bash
-   rm install.php
-   ```
-
-7. **Start the development server**
-
-   ```bash
-   php -S localhost:8000
-   ```
-
-### Windows (XAMPP)
-
-1. Start Apache and MySQL from XAMPP Control Panel
-2. Copy the project to `C:\xampp\htdocs\Nyumbalink\`
-3. Create database `nyumbalink` in phpMyAdmin
-4. Visit `http://localhost/Nyumbalink/install.php`
-5. Delete `install.php` after installation
+| Legacy URL | New URL |
+|---|---|
+| `modules/dashboard/index.php` | `/dashboard` |
+| `modules/houses/index.php` | `/houses` |
+| `modules/houses/create.php` | `/houses/create` |
+| `modules/houses/view.php?id=3` | `/houses/3` |
+| `modules/houses/edit.php?id=3` | `/houses/3/edit` |
+| `modules/tenants/...` | `/tenants`, `/tenants/create`, `/tenants/{id}`, `/tenants/{id}/edit` |
+| `modules/tenants/agreements.php?tenant_id=3` | Agreements live on `/tenants/3` |
+| `modules/payments/index.php` | `/payments` |
+| `modules/payments/create.php` | `/payments/create` |
+| `modules/payments/view.php?id=1` | `/payments/1` |
+| `modules/payments/receipt.php?id=1` | `/payments/1/receipt` (`?download=1` to download) |
+| `modules/auth/register.php` | `/staff` + `/staff/create` (admin-only) |
 
 ---
 
-## Default Credentials
+## Deployment (Apache, shared hosting / subdirectory)
 
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | `admin@nyumbalink.com` | `admin123` |
+The document root must be the `public/` directory. Laravel ships a production-ready `public/.htaccess`; no root-level rewrite file is needed.
 
-> **Important:** Change the default password immediately after first login.
+1. Push the `laravel` branch and pull it on the server (or upload everything **except** `node_modules/` and `.git/`).
+2. Build assets locally (`npm run build`) and upload `public/build/` — shared hosts often lack Node.
+3. On the server:
 
----
+   ```bash
+   composer install --no-dev --optimize-autoloader
+   cp .env.example .env            # then edit it
+   php artisan key:generate
+   php artisan migrate --force
+   php artisan storage:link
+   php artisan config:cache && php artisan route:cache && php artisan view:cache
+   ```
 
-## Security
+4. Ensure `storage/` and `bootstrap/cache/` are writable by the web user.
+5. **Subdirectory installs** (e.g. `https://example.com/nyumbalink`): set
 
-- **CSRF Protection** — All forms include anti-CSRF tokens
-- **Rate Limiting** — Login attempts are rate-limited per IP
-- **Prepared Statements** — All database queries use PDO prepared statements
-- **Security Headers** — X-Content-Type-Options, X-Frame-Options, X-XSS-Protection
-- **Session Security** — HTTP-only cookies, session regeneration on login
-- **Password Hashing** — bcrypt via `password_hash()`
+   ```ini
+   APP_URL=https://example.com/nyumbalink
+   ```
 
----
+   in `.env`. Asset and route URLs follow `APP_URL` automatically.
+6. The server must run **PHP 8.3 or newer**. Point cPanel/panel PHP version accordingly.
 
-## Premium Version
+### Production checklist
 
-A higher version of Nyumbalink is available with additional features:
-
-- **M-Pesa Integration** — Automated payment processing via Safaricom Daraja API
-- **SMS Reminders** — Automatic rent due reminders and payment confirmations via SMS
-- **Automated Receipts** — Instant M-Pesa confirmation receipts sent to tenants
-- **Payment Reconciliation** — Real-time matching of M-Pesa transactions to tenant accounts
-
-For access to the premium version, contact:
-
-- **Email:** alexmiano101@gmail.com
-- **GitHub:** [@mianohh](https://github.com/mianohh)
-
----
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+- [ ] Set a strong `ADMIN_PASSWORD` (or change it after first login)
+- [ ] `APP_DEBUG=false` and `APP_ENV=production`
+- [ ] HTTPS enabled
+- [ ] Regular database backups
 
 ---
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+MIT (see `composer.json`). The original project README referenced a separate commercial "premium" edition; this repository contains only the MIT community version.
