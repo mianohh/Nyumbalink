@@ -1,5 +1,5 @@
-<div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl p-4">
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+<div class="flex h-full w-full min-w-0 flex-1 flex-col gap-4 rounded-xl p-4">
+    <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <div class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-700">
             <flux:text class="text-zinc-500">{{ __('Total Tenants') }}</flux:text>
             <flux:heading level="2">{{ $totalTenants }}</flux:heading>
@@ -18,8 +18,8 @@
         </div>
     </div>
 
-    <div class="grid gap-4 lg:grid-cols-3">
-        <div class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-700 lg:col-span-2">
+    <div class="grid min-w-0 gap-4 lg:grid-cols-3">
+        <div class="min-w-0 rounded-xl border border-zinc-200 p-4 dark:border-zinc-700 lg:col-span-2">
             <flux:heading level="3" class="mb-3">{{ __('Revenue — Last 6 Months') }}</flux:heading>
             <div class="h-64">
                 <canvas data-chart="bar"
@@ -27,7 +27,7 @@
                     data-values='@json($revenueValues)'></canvas>
             </div>
         </div>
-        <div class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-700">
+        <div class="min-w-0 rounded-xl border border-zinc-200 p-4 dark:border-zinc-700">
             <flux:heading level="3" class="mb-3">{{ __('House Status') }}</flux:heading>
             <div class="h-64">
                 <canvas data-chart="doughnut"
@@ -37,8 +37,8 @@
         </div>
     </div>
 
-    <div class="grid gap-4 lg:grid-cols-3">
-        <div class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-700 lg:col-span-2">
+    <div class="grid min-w-0 gap-4 lg:grid-cols-3">
+        <div class="min-w-0 rounded-xl border border-zinc-200 p-4 dark:border-zinc-700 lg:col-span-2">
             <flux:heading level="3" class="mb-3">{{ __('Recent Payments') }}</flux:heading>
 
             <flux:table :striped="true">

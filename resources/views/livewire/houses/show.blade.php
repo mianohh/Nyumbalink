@@ -1,15 +1,15 @@
-<div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl p-4">
-    <div class="flex items-center justify-between">
+<div class="flex h-full w-full min-w-0 flex-1 flex-col gap-4 rounded-xl p-4">
+    <div class="flex flex-wrap items-center justify-between gap-2">
         <flux:heading level="2">{{ $house->house_number }}</flux:heading>
 
-        <div class="flex gap-2">
+        <div class="flex flex-wrap gap-2">
             <flux:button :href="route('houses.edit', $house)" wire:navigate>{{ __('Edit') }}</flux:button>
             <flux:button :href="route('houses.index')" variant="ghost" wire:navigate>{{ __('Back') }}</flux:button>
         </div>
     </div>
 
-    <div class="grid gap-4 lg:grid-cols-3">
-        <div class="space-y-4 lg:col-span-2">
+    <div class="grid min-w-0 gap-4 lg:grid-cols-3">
+        <div class="min-w-0 space-y-4 lg:col-span-2">
             <div class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-700">
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
@@ -71,7 +71,7 @@
             </div>
         </div>
 
-        <div class="space-y-4">
+        <div class="min-w-0 space-y-4">
             <div class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-700">
                 <flux:heading level="3" class="mb-3">{{ __('Current Tenant') }}</flux:heading>
 

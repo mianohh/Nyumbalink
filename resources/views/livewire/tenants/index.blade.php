@@ -13,8 +13,8 @@
         <flux:table.columns>
             <flux:table.column>Name</flux:table.column>
             <flux:table.column>Contact</flux:table.column>
-            <flux:table.column>ID Number</flux:table.column>
-            <flux:table.column>House</flux:table.column>
+            <flux:table.column class="hidden sm:table-cell">ID Number</flux:table.column>
+            <flux:table.column class="hidden sm:table-cell">House</flux:table.column>
             <flux:table.column class="text-end">Actions</flux:table.column>
         </flux:table.columns>
 
@@ -23,8 +23,8 @@
                 <flux:table.row :key="$tenant->id">
                     <flux:table.cell>{{ $tenant->name }}</flux:table.cell>
                     <flux:table.cell>{{ $tenant->contact }}</flux:table.cell>
-                    <flux:table.cell>{{ $tenant->id_number }}</flux:table.cell>
-                    <flux:table.cell>
+                    <flux:table.cell class="hidden sm:table-cell">{{ $tenant->id_number }}</flux:table.cell>
+                    <flux:table.cell class="hidden sm:table-cell">
                         @if ($tenant->house)
                             {{ $tenant->house->house_number }}
                         @else

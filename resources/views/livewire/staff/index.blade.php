@@ -14,7 +14,7 @@
             <flux:table.column>Name</flux:table.column>
             <flux:table.column>Email</flux:table.column>
             <flux:table.column>Role</flux:table.column>
-            <flux:table.column>Joined</flux:table.column>
+            <flux:table.column class="hidden sm:table-cell">Joined</flux:table.column>
             <flux:table.column class="text-end">Actions</flux:table.column>
         </flux:table.columns>
 
@@ -28,7 +28,7 @@
                             {{ $user->role->label() }}
                         </flux:badge>
                     </flux:table.cell>
-                    <flux:table.cell>{{ format_date($user->created_at) }}</flux:table.cell>
+                    <flux:table.cell class="hidden sm:table-cell">{{ format_date($user->created_at) }}</flux:table.cell>
                     <flux:table.cell class="text-end">
                         @can('delete', $user)
                             <flux:button size="sm" variant="danger" wire:click="delete({{ $user->id }})"

@@ -1,8 +1,8 @@
-<div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl p-4">
-    <div class="flex items-center justify-between">
+<div class="flex h-full w-full min-w-0 flex-1 flex-col gap-4 rounded-xl p-4">
+    <div class="flex flex-wrap items-center justify-between gap-2">
         <flux:heading level="2">{{ __('Payment') }} {{ $payment->receipt_number }}</flux:heading>
 
-        <div class="flex gap-2">
+        <div class="flex flex-wrap gap-2">
             <flux:button :href="route('payments.receipt', $payment)" variant="primary" target="_blank">
                 {{ __('View Receipt') }}
             </flux:button>
@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    <div class="grid gap-4 sm:grid-cols-2">
+    <div class="grid min-w-0 gap-4 sm:grid-cols-2">
         <div class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-700">
             <flux:heading level="3" class="mb-3">{{ __('Payment Details') }}</flux:heading>
             <dl class="space-y-2">

@@ -23,7 +23,7 @@
             <flux:table.column>Receipt</flux:table.column>
             <flux:table.column>Date</flux:table.column>
             <flux:table.column>Tenant</flux:table.column>
-            <flux:table.column>House</flux:table.column>
+            <flux:table.column class="hidden sm:table-cell">House</flux:table.column>
             <flux:table.column>Amount</flux:table.column>
             <flux:table.column class="text-end">Actions</flux:table.column>
         </flux:table.columns>
@@ -38,7 +38,7 @@
                             {{ $payment->tenant->name }}
                         </flux:link>
                     </flux:table.cell>
-                    <flux:table.cell>{{ $payment->tenant->house?->house_number ?? '—' }}</flux:table.cell>
+                    <flux:table.cell class="hidden sm:table-cell">{{ $payment->tenant->house?->house_number ?? '—' }}</flux:table.cell>
                     <flux:table.cell class="font-semibold">{{ format_currency($payment->amount_paid) }}</flux:table.cell>
                     <flux:table.cell class="text-end">
                         <flux:button size="sm" :href="route('payments.show', $payment)" wire:navigate>
