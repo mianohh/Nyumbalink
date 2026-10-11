@@ -14,10 +14,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::firstOrCreate(
-            ['email' => env('ADMIN_EMAIL', 'admin@nyumbalink.test')],
+            ['email' => config('nyumbalink.admin.email')],
             [
-                'name' => env('ADMIN_NAME', 'System Administrator'),
-                'password' => env('ADMIN_PASSWORD', 'password'),
+                'name' => config('nyumbalink.admin.name'),
+                'password' => config('nyumbalink.admin.password'),
                 'role' => UserRole::Admin,
                 'email_verified_at' => now(),
             ]
