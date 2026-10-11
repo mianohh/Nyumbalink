@@ -4,6 +4,7 @@ namespace App\Livewire\Staff;
 
 use App\Models\User;
 use Flux\Flux;
+use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -37,7 +38,7 @@ class Index extends Component
         Flux::toast(variant: 'success', text: __('Staff member removed.'));
     }
 
-    public function render()
+    public function render(): View
     {
         $users = User::query()
             ->when($this->search !== '', function ($query) {

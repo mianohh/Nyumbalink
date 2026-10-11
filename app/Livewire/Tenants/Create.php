@@ -6,6 +6,7 @@ use App\Models\House;
 use App\Models\Tenant;
 use App\Services\HouseOccupancyService;
 use Flux\Flux;
+use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -22,6 +23,9 @@ class Create extends Component
 
     public ?int $house_id = null;
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function rules(): array
     {
         return [
@@ -49,7 +53,7 @@ class Create extends Component
         $this->redirectRoute('tenants.index');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.tenants.create', [
             'houses' => House::orderBy('house_number')->get(),

@@ -3,6 +3,7 @@
 namespace App\Livewire\Tenants;
 
 use App\Models\Tenant;
+use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -21,7 +22,7 @@ class Index extends Component
         $this->resetPage();
     }
 
-    public function render()
+    public function render(): View
     {
         $tenants = Tenant::query()
             ->with('house')

@@ -2,14 +2,15 @@
 
 namespace App\Livewire\Houses;
 
-use App\Enums\HouseStatus;
 use App\Models\House;
 use App\Services\HouseOccupancyService;
 use Flux\Flux;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 
 #[Title('Edit House')]
@@ -30,7 +31,7 @@ class Edit extends Component
 
     public string $description = '';
 
-    public $image;
+    public ?TemporaryUploadedFile $image = null;
 
     public bool $removeImage = false;
 
@@ -42,10 +43,13 @@ class Edit extends Component
         $this->house_number = $house->house_number;
         $this->location = $house->location;
         $this->rent_amount = (string) $house->rent_amount;
-        $this->status = $house->status === HouseStatus::Occupied ? HouseStatus::Occupied->value : $house->status->value;
+        $this->status = $house->status->value;
         $this->description = (string) $house->description;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function rules(): array
     {
         return [
@@ -108,7 +112,7 @@ class Edit extends Component
         $this->redirectRoute('houses.index');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.houses.edit');
     }

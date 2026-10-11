@@ -36,11 +36,17 @@ class RentalAgreement extends Model
         ];
     }
 
+    /**
+     * @return BelongsTo<Tenant, $this>
+     */
     public function tenant(): BelongsTo
     {
         return $this->belongsTo(Tenant::class);
     }
 
+    /**
+     * @return BelongsTo<House, $this>
+     */
     public function house(): BelongsTo
     {
         return $this->belongsTo(House::class);

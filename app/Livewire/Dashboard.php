@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\House;
 use App\Models\Payment;
 use App\Models\Tenant;
+use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -13,7 +14,7 @@ use Livewire\Component;
 #[Layout('layouts.app')]
 class Dashboard extends Component
 {
-    public function render()
+    public function render(): View
     {
         $monthRevenue = (float) Payment::whereMonth('payment_date', now()->month)
             ->whereYear('payment_date', now()->year)

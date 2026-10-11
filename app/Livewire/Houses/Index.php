@@ -4,6 +4,7 @@ namespace App\Livewire\Houses;
 
 use App\Enums\HouseStatus;
 use App\Models\House;
+use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -29,7 +30,7 @@ class Index extends Component
         $this->resetPage();
     }
 
-    public function render()
+    public function render(): View
     {
         $houses = House::query()
             ->when($this->search !== '', function ($query) {

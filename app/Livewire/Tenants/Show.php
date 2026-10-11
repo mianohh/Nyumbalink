@@ -6,6 +6,7 @@ use App\Enums\AgreementStatus;
 use App\Models\RentalAgreement;
 use App\Models\Tenant;
 use Flux\Flux;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Carbon;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -33,10 +34,13 @@ class Show extends Component
 
         $this->tenant = $tenant;
         $this->start_date = now()->format('Y-m-d');
-        $this->monthly_rent = (string) ($tenant->house?->rent_amount ?? '');
+        $this->monthly_rent = (string) ($tenant->house->rent_amount ?? '');
         $this->agreement_house_id = $tenant->house_id;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function agreementRules(): array
     {
         return [
@@ -82,7 +86,7 @@ class Show extends Component
         Flux::toast(variant: 'success', text: __('Agreement terminated.'));
     }
 
-    public function render()
+    public function render(): View
     {
         $this->tenant->load([
             'house',

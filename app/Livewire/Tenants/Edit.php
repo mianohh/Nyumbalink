@@ -6,6 +6,7 @@ use App\Models\House;
 use App\Models\Tenant;
 use App\Services\HouseOccupancyService;
 use Flux\Flux;
+use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -35,6 +36,9 @@ class Edit extends Component
         $this->house_id = $tenant->house_id;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function rules(): array
     {
         return [
@@ -57,13 +61,11 @@ class Edit extends Component
 
         if ($previousHouseId !== $this->house_id) {
             if ($previousHouseId) {
-                $occupancy->refresh(House::find($previousHouseId));
+                $occupancy->refresh(House::findOrFail($previousHouseId));
             }
 
             if ($this->house_id) {
                 $occupancy->assign(House::findOrFail($this->house_id), $this->tenant);
-            } else {
-                $occupancy->refresh($this->tenant->house);
             }
         }
 
@@ -96,7 +98,7 @@ class Edit extends Component
         $this->redirectRoute('tenants.index');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.tenants.edit', [
             'houses' => House::orderBy('house_number')->get(),

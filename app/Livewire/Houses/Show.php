@@ -6,6 +6,7 @@ use App\Models\House;
 use App\Models\Tenant;
 use App\Services\HouseOccupancyService;
 use Flux\Flux;
+use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -53,7 +54,7 @@ class Show extends Component
         Flux::toast(variant: 'success', text: __('Tenant unassigned.'));
     }
 
-    public function render()
+    public function render(): View
     {
         $this->house->load(['tenants', 'agreements' => fn ($q) => $q->latest('start_date')]);
 

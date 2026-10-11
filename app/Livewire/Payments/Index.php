@@ -3,6 +3,7 @@
 namespace App\Livewire\Payments;
 
 use App\Models\Payment;
+use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -35,7 +36,7 @@ class Index extends Component
         $this->resetPage();
     }
 
-    public function render()
+    public function render(): View
     {
         $payments = Payment::query()
             ->with(['tenant.house'])

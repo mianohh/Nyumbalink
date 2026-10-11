@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property HouseStatus $status
+ */
 class House extends Model
 {
     /** @use HasFactory<HouseFactory> */
@@ -30,11 +33,17 @@ class House extends Model
         ];
     }
 
+    /**
+     * @return HasMany<Tenant, $this>
+     */
     public function tenants(): HasMany
     {
         return $this->hasMany(Tenant::class);
     }
 
+    /**
+     * @return HasMany<RentalAgreement, $this>
+     */
     public function agreements(): HasMany
     {
         return $this->hasMany(RentalAgreement::class);

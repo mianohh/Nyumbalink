@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Payment;
 use App\Services\ReceiptPdfService;
+use Symfony\Component\HttpFoundation\Response;
 
 class PaymentReceiptController extends Controller
 {
-    public function __invoke(Payment $payment, ReceiptPdfService $service)
+    public function __invoke(Payment $payment, ReceiptPdfService $service): Response
     {
         $this->authorize('view', $payment);
 

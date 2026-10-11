@@ -5,6 +5,7 @@ namespace App\Livewire\Payments;
 use App\Models\Payment;
 use App\Models\Tenant;
 use Flux\Flux;
+use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -27,6 +28,9 @@ class Create extends Component
         $this->tenant_id = (int) request()->query('tenant_id', 0) ?: null;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function rules(): array
     {
         return [
@@ -50,7 +54,7 @@ class Create extends Component
         $this->redirectRoute('payments.show', $payment);
     }
 
-    public function render()
+    public function render(): View
     {
         $tenant = $this->tenant_id ? Tenant::with('house')->find($this->tenant_id) : null;
 

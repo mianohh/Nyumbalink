@@ -3,6 +3,7 @@
 namespace App\Livewire\Payments;
 
 use App\Models\Payment;
+use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -20,7 +21,7 @@ class Show extends Component
         $this->payment = $payment;
     }
 
-    public function render()
+    public function render(): View
     {
         $this->payment->load(['tenant.house']);
 

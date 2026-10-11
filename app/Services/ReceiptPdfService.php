@@ -82,8 +82,8 @@ class ReceiptPdfService
             ['Phone Number:', (string) $tenant->contact],
         ]);
         $this->row($pdf, [
-            ['House Number:', (string) ($house?->house_number ?? 'N/A')],
-            ['Location:', (string) ($house?->location ?? 'N/A')],
+            ['House Number:', (string) ($house->house_number ?? 'N/A')],
+            ['Location:', (string) ($house->location ?? 'N/A')],
         ]);
         $pdf->Ln(5);
 

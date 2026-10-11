@@ -5,6 +5,7 @@ namespace App\Livewire\Staff;
 use App\Enums\UserRole;
 use App\Models\User;
 use Flux\Flux;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -22,6 +23,9 @@ class Create extends Component
 
     public string $role = 'staff';
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function rules(): array
     {
         return [
@@ -50,7 +54,7 @@ class Create extends Component
         $this->redirectRoute('staff.index');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.staff.create');
     }

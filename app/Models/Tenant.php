@@ -20,16 +20,25 @@ class Tenant extends Model
         'house_id',
     ];
 
+    /**
+     * @return BelongsTo<House, $this>
+     */
     public function house(): BelongsTo
     {
         return $this->belongsTo(House::class);
     }
 
+    /**
+     * @return HasMany<Payment, $this>
+     */
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
     }
 
+    /**
+     * @return HasMany<RentalAgreement, $this>
+     */
     public function agreements(): HasMany
     {
         return $this->hasMany(RentalAgreement::class);
@@ -61,7 +70,7 @@ class Tenant extends Model
         $rent = (float) ($this->agreements()
             ->where('status', 'active')
             ->latest('start_date')
-            ->value('monthly_rent') ?? $this->house?->rent_amount ?? 0);
+            ->value('monthly_rent') ?? $this->house->rent_amount ?? 0);
 
         return $rent - $this->totalPaidForMonth($month, $year);
     }

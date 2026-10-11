@@ -6,8 +6,13 @@ use Database\Factories\PaymentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @property-read Carbon $payment_date
+ * @property-read Tenant $tenant
+ */
 class Payment extends Model
 {
     /** @use HasFactory<PaymentFactory> */
@@ -29,6 +34,9 @@ class Payment extends Model
         ];
     }
 
+    /**
+     * @return BelongsTo<Tenant, $this>
+     */
     public function tenant(): BelongsTo
     {
         return $this->belongsTo(Tenant::class);
@@ -49,6 +57,8 @@ class Payment extends Model
 
     /**
      * Create a payment with a freshly generated receipt number inside a transaction.
+     *
+     * @param  array<string, mixed>  $attributes
      */
     public static function record(array $attributes): self
     {
